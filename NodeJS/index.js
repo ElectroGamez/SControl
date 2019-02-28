@@ -1,26 +1,28 @@
-var express        =         require("express");
-var bodyParser     =         require("body-parser");
-var app            =         express();
+const express = require("express");
+const bodyParser = require("body-parser");
+const five = require("johnny-five");
 
-var five = require("johnny-five");
-var board = new five.Board({
-  port: "COM5"
-});
+const app = express();
+
+const board = new five.Board({ port: "COM5" });
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 board.on("ready", function() {
-  var servo = new five.Servo(10);
+  const servo = new five.Servo(10);
 
-
-  app.use(bodyParser.urlencoded({ extended: false }));
-  app.use(bodyParser.json());
+  app.get('/css.css',function(req,res){
+    res.sendfile("css.css");
+  });
 
   app.get('/',function(req,res){
     res.sendfile("index.html");
   });
 
-  app.post('/servo', function(req, res){
+  app.post('/', function(req, res){
     let data = req.body.data;
-    
+    console.log("INFO: Servo moved to", data);
     if (isNaN(data)) return console.log("Not a number");
     servo.to(data);
     res.end();
