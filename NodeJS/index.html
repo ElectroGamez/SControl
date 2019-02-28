@@ -5,22 +5,16 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>
   document.getElementById('led_on').onclick = function() {
-    $.post("send",
+    $.post("/",
     {
       data: "<0,1,0>"
-    },
-    function(data){
-      alert("Data: " + data);
     });
   };
 
   document.getElementById('led_off').onclick = function() {
-    $.post("send",
+    $.post("/",
     {
       data: "<0,0,0>"
-    },
-    function(data){
-      alert("Data: " + data);
     });
   };
 

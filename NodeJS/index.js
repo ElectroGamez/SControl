@@ -15,14 +15,15 @@ app.get('/',function(req,res){
   res.sendfile("index.html");
 });
 
-app.post('/send',function(req,res){
-  console.log('Got data from web:',req.body.data);
+app.post('/', function(req, res){
+  console.log('Got data from web:', req.body.data);
 
   port.write(req.body.data, (err) => {
     if (err) {
       return console.log('Error on write: ', err.message);
     }
   });
+  res.end();
 });
 
 app.listen(3000,function(){
