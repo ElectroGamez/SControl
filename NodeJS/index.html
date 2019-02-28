@@ -1,22 +1,16 @@
 <body>
-  <button type="button" name="on" id="led_on">Turn LED on</button>
-  <button type="button" name="off" id="led_off">Turn LED off</button>
+  <button type="button" name="send" id="led_off">Turn Servo</button>
+
+  <input type="text" id="value" value="">
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>
-  document.getElementById('led_on').onclick = function() {
-    $.post("/",
-    {
-      data: "<0,1,0>"
-    });
-  };
-
   document.getElementById('led_off').onclick = function() {
-    $.post("/",
+    var data = document.getElementById("value").value;
+    $.post("/servo",
     {
-      data: "<0,0,0>"
+      data: data
     });
   };
-
 </script>
 </body>
