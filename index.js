@@ -1,1 +1,0 @@
-//SControl, smart home system.

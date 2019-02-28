@@ -1,0 +1,28 @@
+<body>
+  <button type="button" name="on" id="led_on">Turn LED on</button>
+  <button type="button" name="off" id="led_off">Turn LED off</button>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+  document.getElementById('led_on').onclick = function() {
+    $.post("send",
+    {
+      data: "<0,1,0>"
+    },
+    function(data){
+      alert("Data: " + data);
+    });
+  };
+
+  document.getElementById('led_off').onclick = function() {
+    $.post("send",
+    {
+      data: "<0,0,0>"
+    },
+    function(data){
+      alert("Data: " + data);
+    });
+  };
+
+</script>
+</body>
