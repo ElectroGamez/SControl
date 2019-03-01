@@ -107,8 +107,6 @@ input:checked + .slider:before {
 }
 
 .led {
-  /*background-color: chartreuse;*/
-  /*background-color: red;*/
   height: 15px;
   width: 15px;
   margin: 3ex auto 0 auto;

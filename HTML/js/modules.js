@@ -1,12 +1,10 @@
-const remoteServer = "http://localhost:3000/"
-
-function getSensors() {
-  $.getJSON( "http://localhost:3000/api/sensors", function(data) {
-    //Sould be able to return data but does not seem to work.
-    displaySensors(data)
+function getSensors( callback ) {
+  var foo;
+  $.getJSON( `${remoteServer}api/sensors`, data => {
+    callback(data);
   }).fail(function() {
     alert("Error while collecting sensors.");
-  });
+  });;
 }
 
 function displaySensors(sensors) {
@@ -21,17 +19,18 @@ function displaySensors(sensors) {
   sensorsElement.innerHTML = text;
 }
 
-function addSensor(title, simple, status) {
-  //if (!title || !simple || !status) return console.log("Provide Title, Simple and status", title, simple, status);
-  var sensor = {"title": title, "simple": simple, "status": status}
-  var json = JSON.stringify(sensor);
-
-  $.ajax({
-    type: 'POST',
-    url: 'http://localhost:3000/api/sensors',
-    data: json,
-    success: function (data) { alert('data: ' + data); },
-    contentType: "application/json",
-    dataType: 'json'
+function updateSensor() {
+  getSensors(sensors => {
+    displaySensors(sensors);
+    for (i= 0; i < sensors.length; i++) {
+      if (sensors[i].simple == "true") {
+        foo = document.getElementById(`sensorLed${i}`);
+        if (sensors[i].status == 1) {
+          foo.style.backgroundColor = "chartreuse";
+      } else {
+        foo.style.backgroundColor = "red";
+      }
+    }
+  }
   });
 }

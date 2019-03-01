@@ -8,17 +8,25 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
     <script src="./js/config.js"></script>
-    <script src="./js/modules.js"></script>
+    <script src="./js/modulesHTML.js"></script>
+    <script src="./js/addItems.js"></script>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8">
     <title>SControl</title>
   </head>
   <body>
-    <button onclick="updateSensor()">Getsensors</button>
-
-    <div class="modules">
-      <div id="sensors"></div>
+    <div>
+        Title
+        <input type="text" id="newSensorTitle"><br>
+        Simple? (false/true)
+        <select id="newSensorSimple">
+            <option value="true">True</option>
+            <option value="false">False</option>
+        </select><br>
+        Status (If simple, 0/1 else 0,255)
+        <input type="text" id="newSensorStatus">
+        <button onclick="addSensorHTML()">AddSensor</button>
     </div>
   </body>
 </html>

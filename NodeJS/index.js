@@ -12,11 +12,12 @@ app.use(function (req, res, next) {
 });
 
 const sensors = [
-  {
-    "title": "Sensor1",
-    "status": 0,
-    "simple": true
-  }
+  {  
+    "title":"Default",
+    "status":"",
+    "simple":"true",
+    "pin":"2"
+ }
 ];
 
 board.on("ready", function () {
