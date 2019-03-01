@@ -1,35 +1,39 @@
 const express = require("express");
-const bodyParser = require("body-parser");
 const five = require("johnny-five");
 
 const app = express();
-
 const board = new five.Board({ port: "COM5" });
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+app.use(express.json());
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 
-board.on("ready", function() {
-  const servo = new five.Servo(10);
+const sensors = [
+  {
+    "title": "Sensor1",
+    "status": 0,
+    "simple": true
+  }
+];
 
-  app.get('/css.css',function(req,res){
-    res.sendfile("css.css");
+board.on("ready", function () {
+  app.get('/api/sensors', function (req, res, next) {
+    res.json(sensors);
   });
 
-  app.get('/',function(req,res){
-    res.sendfile("index.html");
+  app.post('/api/sensors', function (req, res, next) {
+    const sensor = {
+      title: req.body.title,
+      status: req.body.status,
+      simple: req.body.simple
+    }
+    console.log("Added sensor");
+    sensors.push(sensor)
+    res.send(sensor)
   });
 
-  app.post('/', function(req, res){
-    let data = req.body.data;
-    console.log("INFO: Servo moved to", data);
-    if (isNaN(data)) return console.log("Not a number");
-    servo.to(data);
-    res.end();
-  });
-
-  app.listen(3000,function(){
-    console.log("Started on PORT 3000");
-  });
-
+  app.listen(3000, () => console.log('Listening on port 3000'));
 });
