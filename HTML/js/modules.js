@@ -1,6 +1,6 @@
 function getSensors( callback ) {
   var foo;
-  $.getJSON( `${remoteServer}api/sensors`, data => {
+  $.getJSON( `${remoteServer}api/devices`, data => {
     callback(data);
   }).fail(function() {
     alert("Error while collecting sensors.");

@@ -27,13 +27,14 @@ board.on("ready", function () {
 
   app.put('/api/devices/:id', function (req, res, next) {
     if (!devices[req.params.id]) return res.status(404).send("device not found.");
-    console.log("Value = ", req.body.value);
     if (!req.body.value) return res.status(400).send("Please provide the new state. value: 0/1");
     devices[req.params.id].value = req.body.value;
     res.send(devices[req.params.id]);
   });
 
   app.post('/api/devices', function (req, res, next) {
+    console.log("Items: ", req.body);
+    if (!req.body.title || !req.body.value || !req.body.simple || !req.body.pin) return res.status(400).send("Invalid object.");
     const device =
     {
       title: req.body.title,
