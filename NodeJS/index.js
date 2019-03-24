@@ -2,7 +2,7 @@ const express = require("express");
 const five = require("johnny-five");
 
 const app = express();
-const board = new five.Board({ port: "COM5" });
+const board = new five.Board({ port: "COM4" });
 
 app.use(express.json());
 app.use(function (req, res, next) {
@@ -11,29 +11,37 @@ app.use(function (req, res, next) {
   next();
 });
 
-const sensors = [
-  {  
-    "title":"Default",
-    "status":"",
-    "simple":"true",
-    "pin":"2"
+const devices = [
+  {
+    "title":"LED",
+    "value": 0,
+    "simple": 1,
+    "pin": 2
  }
 ];
 
 board.on("ready", function () {
-  app.get('/api/sensors', function (req, res, next) {
-    res.json(sensors);
+  app.get('/api/devices', function (req, res, next) {
+    res.json(devices);
   });
 
-  app.post('/api/sensors', function (req, res, next) {
-    const sensor = {
+  app.put('/api/devices/:id', function (req, res, next) {
+    if (!devices[req.params.id]) res.status(404).send("device not found.");
+    res.json(devices);
+  });
+
+  app.post('/api/devices', function (req, res, next) {
+    const device =
+    {
       title: req.body.title,
-      status: req.body.status,
-      simple: req.body.simple
+      value: req.body.value,
+      simple: req.body.simple,
+      pin: req.body.pin
     }
-    console.log("Added sensor");
-    sensors.push(sensor)
-    res.send(sensor)
+
+    console.log("Added device");
+    devices.push(device)
+    res.send(device)
   });
 
   app.listen(3000, () => console.log('Listening on port 3000'));

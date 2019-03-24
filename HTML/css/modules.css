@@ -119,3 +119,15 @@ input:checked + .slider:before {
   flex-direction: row;
   flex-wrap: wrap;
 }
+
+@media screen and (orientation:portrait) {
+  .module {
+    width: 40%;
+  }
+
+  #sensors {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+}
