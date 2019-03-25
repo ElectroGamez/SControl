@@ -2,7 +2,7 @@ const express = require("express");
 const five = require("johnny-five");
 
 const app = express();
-const board = new five.Board({ port: "/dev/ttyUSB0" });
+const board = new five.Board({ port: "COM4" });
 
 app.use(express.json());
 app.use(function (req, res, next) {
@@ -12,14 +12,7 @@ app.use(function (req, res, next) {
   next();
 });
 
-const devices = [
-  {
-    "title":"LED",
-    "value": 0,
-    "simple": 1,
-    "pin": 2
- }
-];
+const devices = [];
 
 const tokens = [
   "kTTNb53LREmAGY5z03FOKqx4f",
