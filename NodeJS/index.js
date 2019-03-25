@@ -25,7 +25,6 @@ board.on("ready", function () {
   });
 
   app.put('/api/devices/:id', function (req, res, next) {
-    console.log("Got Something");
     if (!tokens.includes(req.body.token)) return res.status(403).send("Invalid token.");
     if (!devices[req.params.id]) return res.status(404).send("device not found.");
     if (!req.body.value) return res.status(400).send("Please provide the new state. value: 0/1");
@@ -36,7 +35,6 @@ board.on("ready", function () {
 
   app.post('/api/devices', function (req, res, next) {
     if (!tokens.includes(req.body.token)) return res.status(403).send("Invalid token.");
-    console.log("Items: ", req.body);
     if (!req.body.title || !req.body.value || !req.body.simple || !req.body.pin) return res.status(400).send("Invalid object.");
     const device =
     {
@@ -46,7 +44,6 @@ board.on("ready", function () {
       pin: req.body.pin
     }
 
-    console.log("Added device");
     devices.push(device)
     updateDevices();
     res.send(device)
@@ -56,16 +53,11 @@ board.on("ready", function () {
 });
 
 function updateDevices() {
-  console.log("UPDATING")
   for (i = 0; i < devices.length; i++) {
-    console.log("loopie");
-    console.log(devices[i].value)
     if (devices[i].value == "1") {
-      console.log("Pin to High");
       var pin = new five.Pin(devices[i].pin);
       pin.high();
     } else {
-      console.log("Pin to Low");
       var pin = new five.Pin(devices[i].pin);
       pin.low();
     }
