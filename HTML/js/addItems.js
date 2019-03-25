@@ -1,6 +1,6 @@
 function addSensor(title, simple, status) {
     //if (!title || !simple || !status) return console.log("Provide Title, Simple and status", title, simple, status);
-    var sensor = {"title": title, "simple": simple, "status": status}
+    var sensor = {"title": title, "simple": simple, "status": status, "token": token}
     var json = JSON.stringify(sensor);
 
     $.ajax({
