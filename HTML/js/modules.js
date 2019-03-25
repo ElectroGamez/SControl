@@ -24,10 +24,13 @@ function displaySensors(sensors) {
 function updateSensor() {
   getSensors(sensors => {
     displaySensors(sensors);
-    for (i= 0; i < sensors.length; i++) {
+    for (i = 0; i < sensors.length; i++) {
+      console.log(i, "i ok")
       if (sensors[i].simple == 1) {
         foo = document.getElementById(`sensorLed${i}`);
+        console.log(i)
         if (sensors[i].value == 1) {
+
           foo.style.backgroundColor = "chartreuse";
       } else {
         foo.style.backgroundColor = "red";
