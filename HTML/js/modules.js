@@ -40,7 +40,7 @@ function updateSensor() {
 function sensorValue(id, value) {
   var sensor2 = {
   "token": "kTTNb53LREmAGY5z03FOKqx4f",
-  "value": value
+  "value": `${value}`
 }
   var json2 = JSON.stringify(sensor2);
 
@@ -49,7 +49,8 @@ function sensorValue(id, value) {
     url: `${remoteServer}api/devices/${id}`,
     data: json2,
     success: function (data) {
-      Swal.fire('Added!', `Added ${title} to the Sensors!`, 'success');
+      updateSensor()
+      console.log("Success")
     },
     error: function (data) {
       Swal.fire('Error!', `No contact with server.`, 'error');

@@ -17,3 +17,25 @@ function addSensor(title, simple, status) {
       dataType: 'json'
     });
   }
+
+  function test() {
+    let foo  = {
+      token: "kTTNb53LREmAGY5z03FOKqx4f",
+      value: 1
+    }
+    var foo2 = JSON.stringify(foo);
+
+      $.ajax({
+        type: 'PUT',
+        url: `${remoteServer}api/devices/0`,
+        data: foo2,
+        success: function (data) {
+          Swal.fire('Added!', `Added ok to the Sensors!`, 'success');
+        },
+        error: function (data) {
+          Swal.fire('Error!', `No contact with server.`, 'error');
+        },
+        contentType: "application/json",
+        dataType: 'json'
+      });
+    }
