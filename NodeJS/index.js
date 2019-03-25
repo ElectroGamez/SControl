@@ -1,5 +1,6 @@
 const express = require("express");
 const five = require("johnny-five");
+const fs = require('fs');
 
 const app = express();
 const board = new five.Board({ port: "COM4" });
@@ -12,7 +13,14 @@ app.use(function (req, res, next) {
   next();
 });
 
-const devices = [];
+let devices = [];
+
+try {
+  devices = JSON.parse(fs.readFileSync("devices.json"));
+  console.log("Loaded old devices.");
+} catch (e) {
+  console.log("Failed to load old devices. Making new array.");
+};
 
 const tokens = [
   "kTTNb53LREmAGY5z03FOKqx4f",
@@ -30,6 +38,7 @@ board.on("ready", function () {
     if (!req.body.value) return res.status(400).send("Please provide the new state. value: 0/1");
     devices[req.params.id].value = req.body.value;
     updateDevices();
+    saveDevices()
     res.send(devices[req.params.id]);
   });
 
@@ -45,6 +54,7 @@ board.on("ready", function () {
     }
 
     devices.push(device)
+    saveDevices()
     updateDevices();
     res.send(device)
   });
@@ -62,4 +72,15 @@ function updateDevices() {
       pin.low();
     }
   }
+}
+
+function saveDevices() {
+  fs.writeFile("devices.json", JSON.stringify(devices), 'utf8', function (err) {
+    if (err) {
+        console.log("An error occured while writing JSON Object to File.");
+        return console.log(err);
+    }
+
+    console.log("JSON file has been saved.");
+});
 }
