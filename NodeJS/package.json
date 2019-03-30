@@ -1,0 +1,17 @@
+{
+  "name": "scontrol",
+  "version": "1.0.0",
+  "description": "smarthome api",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.16.4",
+    "johnny-five": "^1.0.0",
+    "joi": "^14.3.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
