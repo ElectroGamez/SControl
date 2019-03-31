@@ -11,7 +11,6 @@ const LightCollection = require("./classes/lightCollection.js");
 global.Report = require('./classes/report.js');
 
 global.report = new Report(fs);
-let lightCollection = new LightCollection(fs);
 
 
 app.use(express.json());
@@ -28,15 +27,27 @@ const lightSchema = joi.object().keys({
 });
 
 board.on("ready", function () {
+  let lightCollection = new LightCollection(fs, Light);
 
   app.get('/api/devices', function (req, res, next) {
-    res.json(lightCollection.collection);
+    let tempArray = new Array();
+
+    for (let i = 0; i < lightCollection.collection.length; i++) {
+      let tempObject = {
+        title: lightCollection.collection[i].title,
+        value: lightCollection.collection[i].value,
+        pinId: lightCollection.collection[i].pin.pin
+      }
+      tempArray.push(tempObject);
+    }
+
+    res.json(tempArray);
   });
 
   app.post('/api/devices', function (req, res, next) {
     joi.validate({title: req.body.title, pin: req.body.pin}, lightSchema, function (error, value) {
       if (error === null) {
-        let light = new Light(five, req.body.title, req.body.pin);
+        let light = new Light(req.body.title, req.body.pin);
         let callback = {title: req.body.title, pin: req.body.pin};
 
         lightCollection.add(light);
@@ -56,6 +67,23 @@ board.on("ready", function () {
 
     })
   });
+
+  app.put('/api/devices/:id/off', function (req, res, next) {
+    if (!lightCollection.collection[req.params.id]) return res.status(404).send("device not found.");
+    lightCollection.collection[req.params.id].pin.low();
+    lightCollection.collection[req.params.id].stringify(data => {
+      res.send(data);
+    });
+  });
+
+  app.put('/api/devices/:id/on', function (req, res, next) {
+    if (!lightCollection.collection[req.params.id]) return res.status(404).send("device not found.");
+    lightCollection.collection[req.params.id].pin.high();
+    lightCollection.collection[req.params.id].stringify(data => {
+      res.send(data);
+    });
+  });
+
   app.listen(3000, () => console.log('Listening on port 3000'));
 });
 
