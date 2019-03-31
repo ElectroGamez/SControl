@@ -33,14 +33,10 @@ board.on("ready", function () {
     let tempArray = new Array();
 
     for (let i = 0; i < lightCollection.collection.length; i++) {
-      let tempObject = {
-        title: lightCollection.collection[i].title,
-        value: lightCollection.collection[i].value,
-        pinId: lightCollection.collection[i].pin.pin
-      }
-      tempArray.push(tempObject);
+        lightCollection.collection[i].stringify(data => {
+          tempArray.push(data);
+        });
     }
-
     res.json(tempArray);
   });
 
