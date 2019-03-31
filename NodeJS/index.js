@@ -4,10 +4,6 @@ const fs = require('fs');
 const joi = require('joi');
 const https = require('https');
 
-const privateKey = fs.readFile('./ssl/privkey.pem');
-const certificate = fs.readFile('./ssl/cert.pem');
-
-
 const app = express();
 global.board = new five.Board({ port: "/dev/ttyUSB0" });
 
@@ -83,6 +79,11 @@ board.on("ready", function () {
       res.send(data);
     });
   });
-
-  https.createServer({key: privateKey, cert: certificate}, app).listen(3000);
+  https.createServer({
+    key: fs.readFileSync('./ssl/privkey.pem'),
+    cert: fs.readFileSync('./ssl/cert.pem')
+  }, app)
+  .listen(3000, function () {
+    console.log('Example app listening on port 3000! Go to https://localhost:3000/')
+  })
 });
