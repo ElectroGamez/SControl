@@ -2,6 +2,11 @@ const express = require("express");
 global.five = require("johnny-five");
 const fs = require('fs');
 const joi = require('joi');
+const https = require('https');
+
+const privateKey = fs.readFile('./ssl/privkey.pem');
+const certificate = fs.readFile('./ssl/cert.pem');
+
 
 const app = express();
 global.board = new five.Board({ port: "/dev/ttyUSB0" });
@@ -33,9 +38,9 @@ board.on("ready", function () {
     let tempArray = new Array();
 
     for (let i = 0; i < lightCollection.collection.length; i++) {
-        lightCollection.collection[i].stringify(data => {
-          tempArray.push(data);
-        });
+      lightCollection.collection[i].stringify(data => {
+        tempArray.push(data);
+      });
     }
     res.json(tempArray);
   });
@@ -60,7 +65,6 @@ board.on("ready", function () {
           error: error.details[0].message
         });
       }
-
     })
   });
 
@@ -80,63 +84,5 @@ board.on("ready", function () {
     });
   });
 
-  app.listen(3000, () => console.log('Listening on port 3000'));
+  https.createServer({key: privateKey, cert: certificate}, app).listen(3000);
 });
-
-// board.on("ready", function () {
-//   app.get('/api/devices', function (req, res, next) {
-//     res.json(devices);
-//   });
-//
-//   app.put('/api/devices/:id', function (req, res, next) {
-//     if (!tokens.includes(req.body.token)) return res.status(403).send("Invalid token.");
-//     if (!devices[req.params.id]) return res.status(404).send("device not found.");
-//     if (!req.body.value) return res.status(400).send("Please provide the new state. value: 0/1");
-//     devices[req.params.id].value = req.body.value;
-//     updateDevices();
-//     saveDevices()
-//     res.send(devices[req.params.id]);
-//   });
-//
-//   app.post('/api/devices', function (req, res, next) {
-//     if (!tokens.includes(req.body.token)) return res.status(403).send("Invalid token.");
-//     if (!req.body.title || !req.body.value || !req.body.simple || !req.body.pin) return res.status(400).send("Invalid object.");
-//     const device =
-//     {
-//       title: req.body.title,
-//       value: req.body.value,
-//       simple: req.body.simple,
-//       pin: req.body.pin
-//     }
-//
-//     devices.push(device)
-//     saveDevices()
-//     updateDevices();
-//     res.send(device)
-//   });
-//
-//   app.listen(3000, () => console.log('Listening on port 3000'));
-// });
-//
-// function updateDevices() {
-//   for (i = 0; i < devices.length; i++) {
-//     if (devices[i].value == "1") {
-//       var pin = new five.Pin(devices[i].pin);
-//       pin.high();
-//     } else {
-//       var pin = new five.Pin(devices[i].pin);
-//       pin.low();
-//     }
-//   }
-// }
-//
-// function saveDevices() {
-//   fs.writeFile("devices.json", JSON.stringify(devices), 'utf8', function (err) {
-//     if (err) {
-//         console.log("An error occured while writing JSON Object to File.");
-//         return console.log(err);
-//     }
-//
-//     console.log("JSON file has been saved.");
-// });
-// }
