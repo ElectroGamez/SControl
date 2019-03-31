@@ -1,10 +1,10 @@
 const express = require("express");
-const five = require("johnny-five");
+global.five = require("johnny-five");
 const fs = require('fs');
 const joi = require('joi');
 
 const app = express();
-const board = new five.Board({ port: "/dev/ttyUSB0" });
+global.board = new five.Board({ port: "/dev/ttyUSB0" });
 
 const Light = require("./classes/light.js");
 const LightCollection = require("./classes/lightCollection.js");
@@ -30,7 +30,7 @@ const lightSchema = joi.object().keys({
 board.on("ready", function () {
 
   app.get('/api/devices', function (req, res, next) {
-    res.json(devices);
+    res.json(lightCollection.collection);
   });
 
   app.post('/api/devices', function (req, res, next) {
@@ -38,6 +38,8 @@ board.on("ready", function () {
       if (error === null) {
         let light = new Light(five, req.body.title, req.body.pin);
         let callback = {title: req.body.title, pin: req.body.pin};
+
+        lightCollection.add(light);
 
         res.status(200).send({
           success: true,

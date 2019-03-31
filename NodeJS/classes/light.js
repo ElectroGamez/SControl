@@ -2,16 +2,18 @@ module.exports = class Light {
   constructor(five, title, pin) {
     this.value = 0;
     this.title = title;
-    this.pin = new five.Pin(pin);
+    this.pin = pin;
   };
 
   off() {
-    this.pin.low();
+    pinObject = new five.Pin(this.pin);
+    inObject.low();
     this.get(value => this.value = value);
   };
 
   on() {
-    this.pin.high();
+    pinObject = new five.Pin(this.pin);
+    inObject.high();
     this.get(value => this.value = value);
   };
 

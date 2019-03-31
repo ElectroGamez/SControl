@@ -4,23 +4,34 @@ module.exports = class Light {
     this.collection = new Array();
     this.directory = "./storage/"
 
-    this.loadlightCollection();
+    this.load();
   };
 
-  loadlightCollection() {
-    let tempBuffer = this.fs.readFile(`${this.directory}lightCollection.json`, (err, data) => {
+  load() {
+    this.fs.readFile(`${this.directory}lightCollection.json`, (err, data) => {
       if (err === null) {
-        this.listed = JSON.parse(tempBuffer);
+        this.collection = JSON.parse(data);
         report.log("lightCollection has been loaded.");
       } else report.error(err);
     });
   }
 
-  savelightCollection() {
-    let tempJSON = JSON.stringify(this.listed);
+  save() {
+    let tempJSON = JSON.stringify(this.collection);
     this.fs.writeFile(`${this.directory}lightCollection.json`, tempJSON, (err) => {
       if (err === null) report.log("lightCollection has been saved.");
       else report.error(err);
     });
+  }
+
+  add(light) {
+    this.collection.push(light);
+    this.save();
+  }
+
+  remove(light) {
+    let index = this.collection.indexOf(light);
+    if (index !== 1) this.collection.splice(index, 1);
+    this.save();
   }
 }
