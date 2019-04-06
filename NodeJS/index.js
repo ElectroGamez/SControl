@@ -30,7 +30,7 @@ const lightSchema = joi.object().keys({
 board.on("ready", function () {
   let lightCollection = new LightCollection(fs, Light);
 
-  app.get('/api/devices', function (req, res, next) {
+  app.get('/api/light', function (req, res, next) {
     let tempArray = new Array();
 
     for (let i = 0; i < lightCollection.collection.length; i++) {
@@ -41,7 +41,7 @@ board.on("ready", function () {
     res.json(tempArray);
   });
 
-  app.post('/api/devices', function (req, res, next) {
+  app.post('/api/light', function (req, res, next) {
     joi.validate({title: req.body.title, pin: req.body.pin}, lightSchema, function (error, value) {
       if (error === null) {
         let light = new Light(req.body.title, req.body.pin);
@@ -64,7 +64,7 @@ board.on("ready", function () {
     })
   });
 
-  app.put('/api/devices/:id/off', function (req, res, next) {
+  app.put('/api/light/:id/off', function (req, res, next) {
     if (!lightCollection.collection[req.params.id]) return res.status(404).send("device not found.");
     lightCollection.collection[req.params.id].pin.low();
     lightCollection.collection[req.params.id].stringify(data => {
@@ -72,7 +72,7 @@ board.on("ready", function () {
     });
   });
 
-  app.put('/api/devices/:id/on', function (req, res, next) {
+  app.put('/api/light/:id/on', function (req, res, next) {
     if (!lightCollection.collection[req.params.id]) return res.status(404).send("device not found.");
     lightCollection.collection[req.params.id].pin.high();
     lightCollection.collection[req.params.id].stringify(data => {

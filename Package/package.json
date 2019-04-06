@@ -1,0 +1,14 @@
+{
+  "name": "scontrol",
+  "version": "1.0.0",
+  "description": "Smart home system, interfaces with API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Wouter de Bruijn",
+  "license": "ISC",
+  "dependencies": {
+    "ssl-root-cas": "^1.3.1"
+  }
+}
