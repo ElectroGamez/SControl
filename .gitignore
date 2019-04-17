@@ -3,6 +3,7 @@ NodeJS/logs/
 NodeJS/storage/
 Package/config.json
 Package/ssl
+!Package/ssl/yoursslcerts
 Package/node_modules
 NodeJS/ssl/*
 !NodeJS/ssl/yoursslcerts
