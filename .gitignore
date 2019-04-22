@@ -1,7 +1,7 @@
 NodeJS/node_modules/
 NodeJS/logs/
 NodeJS/storage/*
-!NodeJS/storage
+!NodeJS/storage/.gitignore
 Package/config.json
 Package/ssl
 Package/node_modules

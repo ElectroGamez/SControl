@@ -89,17 +89,17 @@ board.on("ready", function () {
   });
 
   app.post('/api/rgb', function (req, res, next) {
-        let rgb = new Rgb(req.body.title, req.body.pin);
-        let callback = {title: req.body.title, pin: req.body.pin};
+    let rgb = new Rgb(req.body.title, req.body.pin);
+    let callback = {title: req.body.title, pin: req.body.pin};
 
-        console.log(rgb);
+    console.log(rgb);
 
-        res.status(200).send({
-          success: true,
-          message: "Added the new light.",
-          light: callback
-        });
+    res.status(200).send({
+      success: true,
+      message: "Added the new light.",
+      light: callback
     });
+  });
 
   app.put('/api/rgb/:id/:hex', function (req, res, next) {
 
