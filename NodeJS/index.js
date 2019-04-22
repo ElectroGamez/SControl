@@ -5,12 +5,14 @@ const joi = require('joi');
 const https = require('https');
 
 const app = express();
-global.board = new five.Board({ port: "/dev/ttyUSB0" });
+global.board = new five.Board({ port: "COM14" });
 
 const Light = require("./classes/light.js");
 const LightCollection = require("./classes/lightCollection.js");
-global.Report = require('./classes/report.js');
 
+const Rgb = require("./classes/rgb.js");
+
+global.Report = require('./classes/report.js');
 global.report = new Report(fs);
 
 
@@ -79,6 +81,30 @@ board.on("ready", function () {
       res.send(data);
     });
   });
+
+  //LED LIGHT STRIP LISTENER (still have to fix all this.)
+
+  app.get('/api/rgb', function (req, res, next) {
+    res.send("dont have this yet.");
+  });
+
+  app.post('/api/rgb', function (req, res, next) {
+        let rgb = new Rgb(req.body.title, req.body.pin);
+        let callback = {title: req.body.title, pin: req.body.pin};
+
+        console.log(rgb);
+
+        res.status(200).send({
+          success: true,
+          message: "Added the new light.",
+          light: callback
+        });
+    });
+
+  app.put('/api/rgb/:id/:hex', function (req, res, next) {
+
+  });
+
   https.createServer({
     key: fs.readFileSync('./ssl/privkey.pem'),
     cert: fs.readFileSync('./ssl/cert.pem')
