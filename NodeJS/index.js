@@ -5,7 +5,7 @@ const joi = require('joi');
 const https = require('https');
 
 const app = express();
-global.board = new five.Board({ port: "COM14" });
+global.board = new five.Board({ port: "COM14", repl: false });
 
 const Light = require("./classes/light.js");
 const LightCollection = require("./classes/lightCollection.js");
@@ -15,6 +15,7 @@ const Rgb = require("./classes/rgb.js");
 global.Report = require('./classes/report.js');
 global.report = new Report(fs);
 
+let rgbs = [];
 
 app.use(express.json());
 app.use(function (req, res, next) {
@@ -27,6 +28,11 @@ app.use(function (req, res, next) {
 const lightSchema = joi.object().keys({
   title: joi.string().alphanum().min(3).max(20).required(),
   pin: joi.number().integer().min(2).max(13).required()
+});
+
+const rgbSchema = joi.object().keys({
+  title: joi.string().alphanum().min(3).max(20).required(),
+  pin: joi.array().items(joi.number().integer().min(2).max(13).required(), joi.number().integer().min(2).max(13).required(), joi.number().integer().min(2).max(13).required())
 });
 
 board.on("ready", function () {
@@ -89,20 +95,40 @@ board.on("ready", function () {
   });
 
   app.post('/api/rgb', function (req, res, next) {
-    let rgb = new Rgb(req.body.title, req.body.pin);
-    let callback = {title: req.body.title, pin: req.body.pin};
+    //validate (user) input
+    joi.validate({title: req.body.title, pin: req.body.pin}, rgbSchema, function (error, value) {
+      if (error === null) {
+        //create item
+        let rgb = new Rgb(req.body.title, req.body.pin);
+        rgb.led.on();
+        rgb.led.color("#FF0000");
+        //create callback for client, (to fix sending back whole board)
+        let callback = {title: req.body.title, pin: req.body.pin};
 
-    console.log(rgb);
+        //need to make this
+        //rgbCollectiong.add(rgb);
 
-    res.status(200).send({
-      success: true,
-      message: "Added the new light.",
-      light: callback
-    });
+        rgbs.push(rgb);
+
+        res.status(200).send({
+          success: true,
+          message: "Added the new RGB Light.",
+          light: callback
+        });
+      } else {
+        res.status(400).send({
+          success: false,
+          message: "Invalid object",
+          error: error.details[0].message
+        });
+      }
+    })
   });
 
-  app.put('/api/rgb/:id/:hex', function (req, res, next) {
-
+  app.put('/api/rgb/:id', function (req, res, next) {
+    console.log(req.body);
+    rgbs[req.params.id].led.color(req.body.hex);
+    res.send(req.body.hex);
   });
 
   https.createServer({
